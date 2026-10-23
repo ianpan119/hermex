@@ -13,12 +13,14 @@
 - Fork 的設定只放在上游沒有的檔案：`Config/Local.xcconfig`、`FORK.md`、`CLAUDE.local.md`，
   以及 Xcode 建立 Xcode Cloud workflow 時產生的 `HermesMobile.xcodeproj/xcshareddata/xcodecloud/manifest.json`
   （只記錄 product ID，讓 Xcode 認得這個專案已連上 Xcode Cloud）。
-- 上游檔案目前只改了 2 行：`HermesMobile.xcodeproj/project.pbxproj` 主程式 target 的
-  Debug／Release 各一行 `SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;`（上游是 `NO`），
-  用來在 Apple Silicon Mac 上以「Designed for iPad」執行。
+- 上游檔案目前只改了兩處：
+  - `HermesMobile.xcodeproj/project.pbxproj` 主程式 target 的 Debug／Release 各一行
+    `SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;`（上游是 `NO`），用來在 Apple Silicon Mac 上以「Designed for iPad」執行。
+  - `HermesMobile/Push/PushEnvironment.swift` 的 `PushBundleIdentifier.supported` 加上 `"com.pikapan.hermex"`
+    （上一行補逗號），讓這個 build 能向自架中繼站註冊推播。
 - **不要**改 `Config/Shared.xcconfig`、export options plist、`scripts/`、`.github/`、
   Info.plist 權限文字、App 內的 "Hermex" 字串。想改之前先跟 Ian 確認，並說明會增加哪些衝突風險。
-- 確認差異：`git diff upstream/master --stat` 應該只有上面四個 fork 檔案與 pbxproj 2 行。
+- 確認差異：`git diff upstream/master --stat` 應該只有上面四個 fork 檔案、pbxproj 2 行與 `PushEnvironment.swift`。
 
 ## 身分與帳號
 
@@ -133,10 +135,19 @@ node scripts/asc.js testflight assign-groups --version <MARKETING_VERSION> --bui
 - 不要用上游的發版工具：`.github/workflows/release-candidate-testflight.yml`、`scripts/branch-testflight`、
   `scripts/app-store`、`ci/` 底下的 export options。它們指向原作者的 Team `6GYD9C9N6R` 與
   `com.uzairansar.hermesmobile`。這個 fork 的 GitHub Actions 已在 repo 設定中停用。
-- 不要碰原作者的 App 或推播中繼站。推播在這個 fork 自動停用（`PushEnvironment.swift` 只接受原作者的
-  bundle ID），要用必須自架 `hermex-push` 中繼站。
+- 不要碰原作者的 App 或推播中繼站（`hermex-relay.hermex-relay.workers.dev`）。這個 fork 用自架中繼站，見下方「推播」。
 - 不要 push 到 `upstream`，不要對 `upstream` 開 PR，除非 Ian 明確要求。
 - 開始 Xcode Cloud build、上傳、改 App Store Connect 設定、加測試人員之前，先確認 Ian 有要求。
+
+## 推播（自架中繼站）
+
+- 中繼站：私有 repo `ianpan119/hermex-push`（本機 `/Users/ian/Downloads/hermex-push`），Cloudflare Worker
+  `hermex-relay`，網址 **`https://hermex-relay.pikapan.me`**。部署、憑證、同步上游照那個 repo 的 `FORK.md`。
+- 外掛沿用上游 `uzairansaruzi/hermex-push`（App 寫死從那裡安裝），只把中繼站換掉。
+- 主機端要設 `HERMEX_PUSH_RELAY_URL=https://hermex-relay.pikapan.me`，**必須在手機開啟推播之前**：主機沒設時，
+  App 會寫入原作者的中繼站（`HermexPushPlugin.defaultRelayURL`），原作者的中繼站不接受 `com.pikapan.hermex`。
+- TestFlight／Release build 的 APNs 環境是 `production`（`APS_ENVIRONMENT`），中繼站兩種環境都支援。
+- 驗證：App 的 Settings → Notifications 有「傳送測試通知」，測的是中繼站 → APNs → 手機解密這一段。
 
 ## 已知限制
 
