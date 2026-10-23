@@ -1,8 +1,8 @@
-// Pikermin fork identity. Shared.xcconfig includes this file last, so these
+// Fork identity (App Store Connect name: Hermix). Shared.xcconfig includes this file last, so these
 // values override upstream's team, bundle ID, and app group for every target.
 // Upstream gitignores this file, so it never conflicts when merging upstream.
 // Personal team: YI CHENG PAN (Individual), not the company team.
 
 DEVELOPMENT_TEAM = 4ZHU768LMQ
-APP_BUNDLE_IDENTIFIER = com.pikapan.pikermin$(APP_IDENTIFIER_SUFFIX)
-APP_GROUP_IDENTIFIER = group.com.pikapan.pikermin$(APP_IDENTIFIER_SUFFIX)
+APP_BUNDLE_IDENTIFIER = com.pikapan.hermex$(APP_IDENTIFIER_SUFFIX)
+APP_GROUP_IDENTIFIER = group.com.pikapan.hermex$(APP_IDENTIFIER_SUFFIX)
