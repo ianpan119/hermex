@@ -10,13 +10,15 @@
 
 這個 fork 會長期 merge 上游，任何改到上游檔案的行都可能在之後的 merge 衝突。
 
-- Fork 的設定只放在上游沒有的檔案：`Config/Local.xcconfig`、`FORK.md`、`CLAUDE.local.md`。
+- Fork 的設定只放在上游沒有的檔案：`Config/Local.xcconfig`、`FORK.md`、`CLAUDE.local.md`，
+  以及 Xcode 建立 Xcode Cloud workflow 時產生的 `HermesMobile.xcodeproj/xcshareddata/xcodecloud/manifest.json`
+  （只記錄 product ID，讓 Xcode 認得這個專案已連上 Xcode Cloud）。
 - 上游檔案目前只改了 2 行：`HermesMobile.xcodeproj/project.pbxproj` 主程式 target 的
   Debug／Release 各一行 `SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;`（上游是 `NO`），
   用來在 Apple Silicon Mac 上以「Designed for iPad」執行。
 - **不要**改 `Config/Shared.xcconfig`、export options plist、`scripts/`、`.github/`、
   Info.plist 權限文字、App 內的 "Hermex" 字串。想改之前先跟 Ian 確認，並說明會增加哪些衝突風險。
-- 確認差異：`git diff upstream/master --stat` 應該只有上面三個 fork 檔案與 pbxproj 2 行。
+- 確認差異：`git diff upstream/master --stat` 應該只有上面四個 fork 檔案與 pbxproj 2 行。
 
 ## 身分與帳號
 
