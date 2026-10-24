@@ -30,14 +30,19 @@
   - `Config/Local.xcconfig`：Team、Bundle ID、App Group
   - `FORK.md`、`CLAUDE.local.md`：本文件與讓 Claude Code 自動載入它的入口
   - `HermesMobile.xcodeproj/xcshareddata/xcodecloud/manifest.json`：Xcode 建 workflow 時產生，只記錄 Xcode Cloud product ID
-- 上游檔案目前只改了兩處（共 4 行）：
+  - `HermesMobile/Resources/ThirdPartyNotices/Hermex-LICENSE.txt`：Hermex 本身的 MIT 授權全文（散布 fork 的授權義務；
+    資料夾是 folder reference，放進去就會自動打包，不用改 pbxproj）
+- 上游檔案目前只改了三處：
   - `HermesMobile.xcodeproj/project.pbxproj`：主程式 target 的 Debug／Release 各一行
     `SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;`（上游是 `NO`），讓 Apple Silicon Mac 以「Designed for iPad」執行。
   - `HermesMobile/Push/PushEnvironment.swift`：`PushBundleIdentifier.supported` 加上 `"com.pikapan.hermex"`
     （上一行補逗號），讓這個 build 能向自架中繼站註冊推播。
+  - `HermesMobile/Resources/ThirdPartyNotices/NOTICE.txt`：開頭說明段落後加 2 行，註明這是 Hermex 的 fork 並指向
+    `Hermex-LICENSE.txt`。衝突時保留上游的套件清單，並確保這 2 行還在。
 - **不要**改 `Config/Shared.xcconfig`、export options plist、`scripts/`、`.github/`、Info.plist 權限文字、
   App 內的 "Hermex" 字串，也不要刪除上游檔案。想改之前先跟 Ian 確認，並說明會增加哪些衝突風險。
-- 確認差異：`git diff upstream/master --stat` 應該只有上面 4 個 fork 檔案、`project.pbxproj` 與 `PushEnvironment.swift`。
+- 確認差異：`git diff upstream/master --stat` 應該只有上面 5 個 fork 檔案、`project.pbxproj`、`PushEnvironment.swift` 與 `NOTICE.txt`。
+- 上游的 `LICENSE` 若有變動（例如年份或作者），同步複製到 `Hermex-LICENSE.txt`。
 
 ## 身分與帳號
 

@@ -3,6 +3,9 @@ Hermex third-party notices
 This folder contains license notices for third-party code and assets bundled
 with the iOS app.
 
+This build is a fork of Hermex (Copyright (c) 2026 Uzair Ansar), used under
+the MIT License. See Hermex-LICENSE.txt.
+
 - LDSwiftEventSource / swift-eventsource 3.3.0
   See LDSwiftEventSource-LICENSE.txt.
 - MarkdownUI / swift-markdown-ui 2.4.1
