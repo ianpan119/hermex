@@ -6,12 +6,18 @@
 **不適用於這個 fork**。發版、簽署、推播、同步上游以本文件為準；寫程式的規則（效能、多伺服器、
 測試）仍照 `AGENTS.md`。和 Ian 溝通一律用繁體中文。
 
-## 目前狀態（2026-10-23）
+## 目前狀態（2026-10-25）
 
 - TestFlight：Hermix 2.0 (1)、2.0 (2) 都在 `Internal` 群組；build 2 起支援推播。
+- 下一個 build（3）尚未編譯，會包含 build 2 之後的改動：Hermex 的 MIT 授權聲明（`18c386e`）與上游同步到
+  `c6cb3a9` 的 3 個修正（merge `5efa1c6`）。這次合併只驗證了簽署設定與編譯；受影響的 6 個測試類別因 Mac
+  記憶體不足（swap 滿）沒在本機跑完，上游合併前已過 CI。要發 build 3 時照「流程二」，只指派給 `Internal`。
 - 推播：自架中繼站 `https://hermex-relay.pikapan.me` 已上線，實機驗證過開啟推播、測試通知、
   App 在背景時收到任務完成通知（iPhone 開著 Surge 也正常，不需要額外規則）。
 - 平台：iPhone、iPad（上游本來就支援），Apple Silicon Mac（Designed for iPad）。
+- **只做內部測試。** build 2 曾通過外部 Beta 審核，但 Ian 決定取消公開測試（2026-10-25）：外部群組 `Beta`
+  的公開連結已關閉、群組內沒有 build、沒有測試人員。之後的 build 只指派給 `Internal`，不要送 Beta 審核、
+  不要重新開啟公開連結，除非 Ian 明確要求。
 
 ## 相關 repo
 
@@ -151,7 +157,8 @@ node scripts/asc.js testflight assign-groups --version <MARKETING_VERSION> --bui
 - 指派後確認 `GET /v1/betaGroups/<Internal 群組 id>/builds` 列得到這個 build。測試人員的 `state` 若是
   `NOT_INVITED`，用 `POST /v1/betaTesterInvitations`（app + betaTester）寄出邀請。第一次發版就遇過這兩個問題。
 - Build number 由 Xcode Cloud 自動遞增；版本號 `MARKETING_VERSION` 沿用上游，不要自己改。
-- 外部測試或上架需要另外提交 Beta 審核，先問 Ian。名稱 Hermex 屬於原作者，外部審核可能被拒。
+- 目前只做內部測試（見「目前狀態」）。外部測試或上架都要先問 Ian：名稱、圖示與 App 內連結都屬於原作者，
+  對外散布有仿冒與授權上的顧慮。
 
 ## 推播（自架中繼站）
 
